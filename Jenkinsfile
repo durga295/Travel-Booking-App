@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/your-username/travel-app.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t travel-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker stop travel-app || true'
+                sh 'docker rm travel-app || true'
+                sh 'docker run -d -p 3000:3000 --name travel-app travel-app'
+            }
+        }
+    }
+}
